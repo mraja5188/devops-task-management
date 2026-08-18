@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Task Management System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        input, textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            cursor: pointer;
+            background: #333;
+            color: white;
+            border: none;
+        }
+
+        .task {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+
+        .completed {
+            background: #e8f5e9;
+        }
+
+        .actions a {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>DevOps Task Management System</h1>
+
+    <h2>Add New Task</h2>
+
+    <form action="/add" method="POST">
+
+        <input
+            type="text"
+            name="title"
+            placeholder="Task title"
+            required
+        >
+
+        <textarea
+            name="description"
+            placeholder="Task description"
+            rows="3"
+        ></textarea>
+
+        <select name="priority">
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Low">Low</option>
+        </select>
+
+        <button type="submit">Add Task</button>
+
+    </form>
+
+    <h2>Task List</h2>
+
+    {% if tasks %}
+
+        {% for task in tasks %}
+
+        <div class="task {% if task['status'] == 'Completed' %}completed{% endif %}">
+
+            <h3>{{ task['title'] }}</h3>
+
+            <p>{{ task['description'] }}</p>
+
+            <p>
+                <strong>Priority:</strong>
+                {{ task['priority'] }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                {{ task['status'] }}
+            </p>
+
+            <div class="actions">
+
+                {% if task['status'] != 'Completed' %}
+                <a href="/complete/{{ task['id'] }}">
+                    Mark Completed
+                </a>
+                {% endif %}
+
+                <a href="/delete/{{ task['id'] }}">
+                    Delete
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No tasks have been added yet.</p>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
